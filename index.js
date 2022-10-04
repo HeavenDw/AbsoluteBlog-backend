@@ -4,6 +4,8 @@ import multer from 'multer';
 
 import * as UserController from './contollers/UserController.js';
 import checkAuth from './utils/checkAuth.js';
+import handleValidationErrors from './utils/handleValidationErrors.js';
+import { loginValidation, registerValidation } from './validations.js';
 
 //connect to mongodb
 mongoose
@@ -30,8 +32,8 @@ app.listen(4444, () => {
 });
 
 //User API
-app.post('/auth/register/', UserController.register);
-app.post('/auth/login/', UserController.login);
+app.post('/auth/register/', registerValidation, handleValidationErrors, UserController.register);
+app.post('/auth/login/', loginValidation, handleValidationErrors, UserController.login);
 app.get('/auth/me', checkAuth, UserController.getMe);
 app.post('/auth/avatar', checkAuth, UserController.setAvatar);
 
