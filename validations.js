@@ -12,3 +12,10 @@ export const registerValidation = [
   body('password', 'Пароль должен быть минимум 5 символов').isLength({ min: 5 }),
   body('nickname', 'Укажите имя').isLength({ min: 3 }),
 ];
+
+//Data validation when user try to create a post
+export const postCreateValidation = [
+  body('title', 'Заголовок должен быть минимум 5 символов').isLength({ min: 5 }).isString(),
+  body('text', 'Текст должен быть минимум 5 символов').isLength({ min: 5 }).isString(),
+  body('imageUrl', 'Неверная ссылка на изображение').optional().isString(),
+];

@@ -2,10 +2,10 @@ import express from 'express';
 import mongoose from 'mongoose';
 import multer from 'multer';
 
-import * as UserController from './contollers/UserController.js';
+import { PostController, UserController } from './controllers/index.js';
 import checkAuth from './utils/checkAuth.js';
 import handleValidationErrors from './utils/handleValidationErrors.js';
-import { loginValidation, registerValidation } from './validations.js';
+import { loginValidation, registerValidation, postCreateValidation } from './validations.js';
 
 //connect to mongodb
 mongoose
@@ -36,6 +36,19 @@ app.post('/auth/register/', registerValidation, handleValidationErrors, UserCont
 app.post('/auth/login/', loginValidation, handleValidationErrors, UserController.login);
 app.get('/auth/me', checkAuth, UserController.getMe);
 app.post('/auth/avatar', checkAuth, UserController.setAvatar);
+
+//Posts API
+app.get('/posts', PostController.getAll);
+app.get('/posts/:id', PostController.getPost);
+app.post('/posts', checkAuth, postCreateValidation, handleValidationErrors, PostController.create);
+app.delete('/posts/:id', checkAuth, PostController.remove);
+app.patch(
+  '/posts/:id',
+  checkAuth,
+  postCreateValidation,
+  handleValidationErrors,
+  PostController.update,
+);
 
 //init images upload (multer)
 const storage = multer.diskStorage({
