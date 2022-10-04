@@ -1,8 +1,9 @@
 import express from 'express';
 import mongoose from 'mongoose';
+import multer from 'multer';
 
 import * as UserController from './contollers/UserController.js';
-import CheckAuth from './utils/CheckAuth.js';
+import checkAuth from './utils/checkAuth.js';
 
 //connect to mongodb
 mongoose
@@ -31,5 +32,24 @@ app.listen(4444, () => {
 //User API
 app.post('/auth/register/', UserController.register);
 app.post('/auth/login/', UserController.login);
-app.get('/auth/me', CheckAuth, UserController.getMe);
-app.post('/auth/avatar', CheckAuth, UserController.setAvatar);
+app.get('/auth/me', checkAuth, UserController.getMe);
+app.post('/auth/avatar', checkAuth, UserController.setAvatar);
+
+//init images upload (multer)
+const storage = multer.diskStorage({
+  destination: (_, __, cb) => {
+    cb(null, 'uploads');
+  },
+  filename: (_, file, cb) => {
+    cb(null, Date.now() + '-' + file.originalname);
+  },
+});
+
+const upload = multer({ storage });
+
+//Images upload API
+app.post('/upload', checkAuth, upload.single('image'), async (req, res) => {
+  res.json({
+    url: `/uploads/${req.file.filename}`,
+  });
+});
