@@ -1,6 +1,7 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import multer from 'multer';
+import cors from 'cors';
 
 import { PostController, UserController } from './controllers/index.js';
 import checkAuth from './utils/checkAuth.js';
@@ -23,6 +24,9 @@ const app = express();
 //Enable express to read json
 app.use(express.json());
 
+//Enable cors
+app.use(cors());
+
 //Enable static links for uploads
 app.use('/uploads', express.static('uploads'));
 
@@ -38,7 +42,7 @@ app.get('/auth/me', checkAuth, UserController.getMe);
 app.post('/auth/avatar', checkAuth, UserController.setAvatar);
 
 //Posts API
-app.get('/posts', PostController.getAll);
+app.get('/posts/', PostController.getAll);
 app.get('/posts/:id', PostController.getPost);
 app.post('/posts', checkAuth, postCreateValidation, handleValidationErrors, PostController.create);
 app.delete('/posts/:id', checkAuth, PostController.remove);

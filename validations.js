@@ -16,6 +16,6 @@ export const registerValidation = [
 //Data validation when user try to create a post
 export const postCreateValidation = [
   body('title', 'Заголовок должен быть минимум 5 символов').isLength({ min: 5 }).isString(),
-  body('text', 'Текст должен быть минимум 5 символов').isLength({ min: 5 }).isString(),
+  body('text', 'Текст должен быть минимум 5 символов').isString(),
   body('imageUrl', 'Неверная ссылка на изображение').optional().isString(),
 ];

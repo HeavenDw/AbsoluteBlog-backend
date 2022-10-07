@@ -5,8 +5,10 @@ export const create = async (req, res) => {
   try {
     //Create new post in db
     const doc = new PostModel({
+      title: req.body.title,
       text: req.body.text,
       imageUrl: req.body.imageUrl,
+      tags: req.body.tags,
       user: req.userId,
     });
 
@@ -24,7 +26,18 @@ export const create = async (req, res) => {
 //Get all posts
 export const getAll = async (req, res) => {
   try {
-    const posts = await PostModel.find().populate('user').exec();
+    if (req.query.tag) {
+      const posts = await PostModel.find({ tags: req.query.tag })
+        .sort({ createdAt: -1 })
+        .populate('user')
+        .exec();
+      return res.json(posts);
+    }
+    if (req.query.sortBy === 'popular') {
+      const posts = await PostModel.find().sort({ views: 1 }).populate('user').exec();
+      return res.json(posts);
+    }
+    const posts = await PostModel.find().sort({ createdAt: -1 }).populate('user').exec();
     res.json(posts);
   } catch (err) {
     console.log(err);
@@ -65,7 +78,7 @@ export const getPost = async (req, res) => {
 
         res.json(doc);
       },
-    );
+    ).populate('user');
   } catch (err) {
     console.log(err);
     res.status(500).json({
@@ -147,6 +160,24 @@ export const update = async (req, res) => {
     console.log(err);
     res.status(500).json({
       message: 'Не удалось обновить статьи',
+    });
+  }
+};
+
+export const getLastTags = async (req, res) => {
+  try {
+    const posts = await PostModel.find().limit(5).exec();
+
+    const tags = posts
+      .map((obj) => obj.tags)
+      .flat()
+      .slice(0, 5);
+
+    res.json(tags);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      message: 'Не удалось получить тэги',
     });
   }
 };
