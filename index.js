@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 import multer from 'multer';
 import cors from 'cors';
 
-import { PostController, UserController } from './controllers/index.js';
+import { CommentController, PostController, UserController } from './controllers/index.js';
 import checkAuth from './utils/checkAuth.js';
 import handleValidationErrors from './utils/handleValidationErrors.js';
 import { loginValidation, registerValidation, postCreateValidation } from './validations.js';
@@ -53,6 +53,12 @@ app.patch(
   handleValidationErrors,
   PostController.update,
 );
+
+//Comments API
+app.get('/comments', CommentController.getComments);
+app.post('/comments', checkAuth, CommentController.create);
+app.delete('/comments/:id', checkAuth, CommentController.remove);
+app.patch('/comments/:id', checkAuth, CommentController.update);
 
 //init images upload (multer)
 const storage = multer.diskStorage({
