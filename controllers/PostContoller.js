@@ -37,6 +37,15 @@ export const getAll = async (req, res) => {
       const posts = await PostModel.find().sort({ views: 1 }).populate('user').exec();
       return res.json(posts);
     }
+    if (req.query.searchBy) {
+      const posts = await PostModel.find({
+        $or: [{ title: { $regex: req.query.searchBy } }, { text: { $regex: req.query.searchBy } }],
+      })
+        .sort({ createdAt: -1 })
+        .populate('user')
+        .exec();
+      return res.json(posts);
+    }
     const posts = await PostModel.find().sort({ createdAt: -1 }).populate('user').exec();
     res.json(posts);
   } catch (err) {

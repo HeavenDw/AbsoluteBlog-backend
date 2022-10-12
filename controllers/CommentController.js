@@ -51,7 +51,14 @@ export const getComments = async (req, res) => {
 
 export const remove = async (req, res) => {
   try {
-    const commentId = req.params.id;
+    const commentId = req.body._id;
+
+    await PostModel.findByIdAndUpdate(
+      {
+        _id: req.body.postId,
+      },
+      { $inc: { commentsCount: -1 } },
+    );
 
     CommentModel.findByIdAndDelete(
       {
@@ -86,7 +93,7 @@ export const remove = async (req, res) => {
 
 export const update = async (req, res) => {
   try {
-    const commentId = req.params.id;
+    const commentId = req.body._id;
 
     CommentModel.findByIdAndUpdate(
       {

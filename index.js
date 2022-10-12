@@ -53,12 +53,13 @@ app.patch(
   handleValidationErrors,
   PostController.update,
 );
+app.get('/tags/', PostController.getLastTags);
 
 //Comments API
 app.get('/comments', CommentController.getComments);
 app.post('/comments', checkAuth, CommentController.create);
-app.delete('/comments/:id', checkAuth, CommentController.remove);
-app.patch('/comments/:id', checkAuth, CommentController.update);
+app.delete('/comments', checkAuth, CommentController.remove);
+app.patch('/comments', checkAuth, CommentController.update);
 
 //init images upload (multer)
 const storage = multer.diskStorage({
