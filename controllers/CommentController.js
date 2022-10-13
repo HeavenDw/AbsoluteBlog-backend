@@ -38,7 +38,11 @@ export const getComments = async (req, res) => {
 
       return res.json(comments);
     }
-    const comments = await CommentModel.find().limit(5).populate('user').exec();
+    const comments = await CommentModel.find()
+      .sort({ createdAt: -1 })
+      .limit(5)
+      .populate('user')
+      .exec();
 
     res.json(comments);
   } catch (err) {

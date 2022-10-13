@@ -2,17 +2,17 @@ import express from 'express';
 import mongoose from 'mongoose';
 import multer from 'multer';
 import cors from 'cors';
+import * as dotenv from 'dotenv';
 
 import { CommentController, PostController, UserController } from './controllers/index.js';
 import checkAuth from './utils/checkAuth.js';
 import handleValidationErrors from './utils/handleValidationErrors.js';
 import { loginValidation, registerValidation, postCreateValidation } from './validations.js';
 
+dotenv.config();
 //connect to mongodb
 mongoose
-  .connect(
-    'mongodb+srv://svntsvntsvn:Ko8qgIlX2eiNiqfx@cluster0.b2mlu1l.mongodb.net/blog?retryWrites=true&w=majority',
-  )
+  .connect(process.env.MONGO_DB_LINK)
   .then(() => {
     console.log('DB ok');
   })
@@ -31,7 +31,7 @@ app.use(cors());
 app.use('/uploads', express.static('uploads'));
 
 //Run server in 4444 port
-app.listen(4444, () => {
+app.listen(process.env.PORT || 4444, () => {
   console.log('server OK');
 });
 

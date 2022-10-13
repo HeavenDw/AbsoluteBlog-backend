@@ -16,7 +16,7 @@ export const register = async (req, res) => {
       email: req.body.email,
       passwordHash: hash,
       nickname: req.body.nickname,
-      avatarUrl: '/no-avatar.png',
+      avatarUrl: '/uploads/no-avatar.png',
     });
 
     const user = await doc.save();
@@ -40,16 +40,16 @@ export const register = async (req, res) => {
     console.log(err.message);
     if (err.message.includes('email_1')) {
       return res.status(500).json({
-        message: 'Email уже зарегестрирован',
+        message: 'Email уже зарегистрирован',
       });
     }
     if (err.message.includes('nickname_1')) {
       return res.status(500).json({
-        message: 'Nickname уже зарегестрирован',
+        message: 'Nickname уже зарегистрирован',
       });
     }
     res.status(500).json({
-      message: 'Не удалось зарегестрироваться',
+      message: 'Не удалось зарегистрироваться',
     });
   }
 };
