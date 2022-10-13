@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import multer from 'multer';
 import cors from 'cors';
 import * as dotenv from 'dotenv';
+import fs from 'fs';
 
 import { CommentController, PostController, UserController } from './controllers/index.js';
 import checkAuth from './utils/checkAuth.js';
@@ -31,7 +32,7 @@ app.use(cors());
 app.use('/uploads', express.static('uploads'));
 
 //Run server in 4444 port
-app.listen(process.env.PORT, () => {
+app.listen(process.env.PORT || 4444, () => {
   console.log('server OK');
 });
 
@@ -64,6 +65,10 @@ app.patch('/comments', checkAuth, CommentController.update);
 //init images upload (multer)
 const storage = multer.diskStorage({
   destination: (_, __, cb) => {
+    if (!fs.existsSync('uploads')) {
+      console.log('mkdir');
+      fs.mkdirSync('uploads');
+    }
     cb(null, 'uploads');
   },
   filename: (_, file, cb) => {
