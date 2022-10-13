@@ -31,7 +31,7 @@ app.use(cors());
 app.use('/uploads', express.static('uploads'));
 
 //Run server in 4444 port
-app.listen(process.env.PORT || 4444, () => {
+app.listen(process.env.PORT, () => {
   console.log('server OK');
 });
 
