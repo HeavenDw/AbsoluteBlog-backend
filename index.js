@@ -31,7 +31,7 @@ app.use(cors());
 //Enable static links for uploads
 app.use('/uploads', express.static('uploads'));
 
-//Run server in 4444 port
+//Run server
 app.listen(process.env.PORT || 4444, () => {
   console.log('server OK');
 });
@@ -78,9 +78,11 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
+console.log(process.env.PORT);
+
 //Images upload API
 app.post('/upload', checkAuth, upload.single('image'), async (req, res) => {
   res.json({
-    url: `/uploads/${req.file.filename}`,
+    url: `${process.env.PORT}/uploads/${req.file.filename}`,
   });
 });
