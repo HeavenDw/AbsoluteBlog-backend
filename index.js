@@ -78,11 +78,10 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-console.log(process.env.PORT);
-
 //Images upload API
 app.post('/upload', checkAuth, upload.single('image'), async (req, res) => {
+  const fullUrl = req.protocol + '://' + req.get('host');
   res.json({
-    url: `${process.env.PORT}/uploads/${req.file.filename}`,
+    url: `${fullUrl}/uploads/${req.file.filename}`,
   });
 });
