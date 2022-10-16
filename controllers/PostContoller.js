@@ -142,10 +142,10 @@ export const update = async (req, res) => {
         _id: postId,
       },
       {
-        text: req.body.text,
-        imageUrl: req.body.imageUrl,
-        user: req.userId,
         tags: req.body.tags,
+        title: req.body.title,
+        imageUrl: req.body.imageUrl,
+        text: req.body.text,
       },
       (err, doc) => {
         if (err) {
