@@ -11,12 +11,15 @@ export const register = async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hash = await bcrypt.hash(password, salt);
 
+    //server url
+    const fullUrl = 'https://' + req.get('host');
+
     //Create new user modele
     const doc = new UserModel({
       email: req.body.email,
       passwordHash: hash,
       nickname: req.body.nickname,
-      avatarUrl: '/uploads/no-avatar.png',
+      avatarUrl: `${fullUrl}/uploads/no-avatar.png`,
     });
 
     const user = await doc.save();

@@ -80,7 +80,7 @@ const upload = multer({ storage });
 
 //Images upload API
 app.post('/upload', checkAuth, upload.single('image'), async (req, res) => {
-  const fullUrl = req.protocol + '://' + req.get('host');
+  const fullUrl = 'https://' + req.get('host');
   res.json({
     url: `${fullUrl}/uploads/${req.file.filename}`,
   });
